@@ -1,8 +1,9 @@
 const bodyParser = require('body-parser');
 const express=require('express');
 const app=express();
-
+app.use(bodyParser.urlencoded({extended:true}));
 app.listen(3000,()=>{console.log("app is listening at port 3000")});
+let tasks=[];
 app.set('view engine','ejs');
 app.get("/",(req,res)=>{
 
@@ -59,10 +60,18 @@ app.get("/",(req,res)=>{
 
 // 
 
-var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+var options = { weekday: 'long', month: 'long', day: 'numeric' };
 var today  = new Date();
 var date=today.toLocaleDateString("en-US", options);
-console.log(typeof(date));
-res.render('list',{date:date});
+
+res.render('list',{date:date,newListItem:tasks});
+
+})
+
+app.post("/",(req,res)=>{
+let task=req.body.nextTask;
+tasks.push(task);
+console.log(task);
+res.redirect("/");
 
 })
